@@ -36,7 +36,9 @@ spec:
           value: "testdb"
         - name: CORS_ALLOWED_ORIGIN
           # TODO this might not be what I decide later, replace me
-          value: "https://dashboard.cbnr.dev"
+          # SO this can't be https even though https works on the frontend due to
+          # https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
+          value: "http://app.cbnr.xyz"
         # equivalent to "docker run --expose", so no need for EXPOSE in dockerfile
         ports:
         - name: {{ $.Chart.Name }}-port
