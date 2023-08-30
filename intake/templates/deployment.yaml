@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Chart.Name }}
+  labels:
+    app: {{ $.Chart.Name }}
+spec:
+  replicas: {{ $.Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: {{ $.Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Chart.Name }}
+    spec:
+      serviceAccountName: {{ $.Chart.Name }}
+      containers:
+      - name: {{ $.Chart.Name }}
+        image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+        imagePullPolicy: {{ $.Values.image.pullPolicy }}
+        # this is what starts the container in "intake" mode
+        args:
+        - intake
+        env:
+        - name: SYSLOG_LISTENER_PORT
+          value: "{{ .Values.service.port }}"
+        - name: INFLUX_URL
+          value: "http://influxdb.default:8086"
+        - name: INFLUX_DB_NAME
+          value: "testdb"
+          # TODO, this should not be baked into image but instead mounted via k8s
+        - name: MMDB_PATH
+          value: "/app/GeoLite2-Country.mmdb"
+        # equivalent to "docker run --expose", so no need for EXPOSE in dockerfile
+        ports:
+        - name: {{ $.Chart.Name }}-port
+          containerPort: {{ .Values.service.port }}
+          protocol: {{ .Values.service.protocol }}
+          # this works, but requesting a specific port on 1 node => 1 pod maximum
+          # hostPort: {{ .Values.service.port }}
+        resources:
+          {{- toYaml $.Values.resources | nindent 12 }}
