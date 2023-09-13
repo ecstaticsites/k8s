@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $.Release.Name }}
+  labels:
+    app: {{ $.Chart.Name }}
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: {{ $.Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Chart.Name }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: {{ $.Release.Name }}
+      containers:
+      - name: caddy
+        image: caddy:{{ $.Chart.AppVersion }}
+        # below, we claim ports 80 and 443 on the entire node
+        # so, implicitly, only one caddy pod per node using this
+        # also means we need no service.yaml, as this does that job
+        ports:
+        - name: {{ $.Release.Name }}-http
+          containerPort: 80
+          protocol: TCP
+          hostPort: 80
+        - name: {{ $.Release.Name }}-https
+          containerPort: 443
+          protocol: TCP
+          hostPort: 443
+        resources: {}
+        volumeMounts:
+        - name: {{ $.Release.Name }}-data
+          mountPath: /var/lib/caddy/.local/share/caddy/
+        - name: {{ $.Release.Name }}-config-volume
+          mountPath: /etc/caddy/
+      volumes:
+      - name: {{ $.Release.Name }}-config-volume
+        configMap:
+          name: {{ $.Release.Name }}-config
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ $.Release.Name }}-data
+    spec:
+      accessModes:
+      - "ReadWriteOnce"
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 1Gi

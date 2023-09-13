@@ -1,0 +1,19 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ $.Release.Name }}-config
+  labels:
+    app: {{ $.Chart.Name }}
+data:
+  Caddyfile: |
+    {
+      debug
+      storage file_system /var/lib/caddy/.local/share/caddy
+      acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+    }
+
+    api.cbnr.xyz {
+      root * /var/www
+      reverse_proxy /query serve.default:5000
+      file_server
+    }
