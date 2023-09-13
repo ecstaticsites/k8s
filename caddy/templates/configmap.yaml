@@ -7,13 +7,15 @@ metadata:
 data:
   Caddyfile: |
     {
-      debug
+      email brandon@willett.io
+      # this might be a decent problem
+      # i don't think caddy checks this location for existing certs at startup
+      # before it attempts to get new certs from lets encrypt, etc
+      # so restarting caddy one too many times might blow the rate limit??
       storage file_system /var/lib/caddy/.local/share/caddy
-      acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
     }
 
     api.cbnr.xyz {
-      root * /var/www
-      reverse_proxy /query serve.default:5000
-      file_server
+      log
+      reverse_proxy /query serve.default:8080
     }

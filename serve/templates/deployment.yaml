@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $.Chart.Name }}
+  name: {{ $.Release.Name }}
   labels:
     app: {{ $.Chart.Name }}
 spec:
-  replicas: {{ $.Values.replicaCount }}
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -19,32 +19,27 @@ spec:
       labels:
         app: {{ $.Chart.Name }}
     spec:
-      serviceAccountName: {{ $.Chart.Name }}
+      serviceAccountName: {{ $.Release.Name }}
       containers:
-      - name: {{ $.Chart.Name }}
-        image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
-        imagePullPolicy: {{ $.Values.image.pullPolicy }}
+      - name: {{ $.Release.Name }}
+        image: "pickledish/cbnr:{{ $.Chart.AppVersion }}"
+        imagePullPolicy: IfNotPresent
         # this is what starts the container in "server" mode
         args:
         - serve
         env:
         - name: HTTP_LISTENER_PORT
-          value: "{{ .Values.service.port }}"
+          value: "8080"
         - name: INFLUX_URL
           value: "http://influxdb.default:8086"
         - name: INFLUX_DB_NAME
           value: "testdb"
         - name: CORS_ALLOWED_ORIGIN
-          # TODO this might not be what I decide later, replace me
           # SO this can't be https even though https works on the frontend due to
           # https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
           value: "http://app.cbnr.xyz"
         # equivalent to "docker run --expose", so no need for EXPOSE in dockerfile
         ports:
-        - name: {{ $.Chart.Name }}-port
-          containerPort: {{ .Values.service.port }}
-          protocol: {{ .Values.service.protocol }}
-          # this works, but requesting a specific port on 1 node => 1 pod maximum
-          # hostPort: {{ .Values.service.port }}
-        resources:
-          {{- toYaml $.Values.resources | nindent 12 }}
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
