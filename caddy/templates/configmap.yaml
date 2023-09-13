@@ -5,17 +5,22 @@ metadata:
   labels:
     app: {{ $.Chart.Name }}
 data:
+  # TODO -- typical problem, when updating this file alone, pods don't restart
   Caddyfile: |
     {
+      log {
+        format console
+      }
       email brandon@willett.io
-      # this might be a decent problem
-      # i don't think caddy checks this location for existing certs at startup
-      # before it attempts to get new certs from lets encrypt, etc
-      # so restarting caddy one too many times might blow the rate limit??
+      # this works as intended -- certs aren't renewed upon Caddy restart
+      # when this cache is mounted and has valid certs already, so less
+      # risk of hitting LE rate limit
       storage file_system /var/lib/caddy/.local/share/caddy
     }
 
     api.cbnr.xyz {
-      log
+      log {
+        format console
+      }
       reverse_proxy /query serve.default:8080
     }

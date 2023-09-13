@@ -35,9 +35,7 @@ spec:
         - name: INFLUX_DB_NAME
           value: "testdb"
         - name: CORS_ALLOWED_ORIGIN
-          # SO this can't be https even though https works on the frontend due to
-          # https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
-          value: "http://app.cbnr.xyz"
+          value: "https://app.cbnr.xyz"
         # equivalent to "docker run --expose", so no need for EXPOSE in dockerfile
         ports:
         - containerPort: 8080

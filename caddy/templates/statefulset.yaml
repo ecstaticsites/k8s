@@ -32,6 +32,9 @@ spec:
           containerPort: 443
           protocol: TCP
           hostPort: 443
+        - name: {{ $.Release.Name }}-admin
+          containerPort: 2019
+          protocol: TCP
         resources: {}
         volumeMounts:
         - name: {{ $.Release.Name }}-data
