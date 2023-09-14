@@ -40,5 +40,5 @@ spec:
         # equivalent to "docker run --expose", so no need for EXPOSE in dockerfile
         ports:
         - containerPort: 8517
-          protocol: UDP
+          protocol: TCP
         resources: {}

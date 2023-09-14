@@ -108,7 +108,8 @@
       "default": {
         "encoder": {
           "format": "console"
-        }
+        },
+        "level": "debug"
       }
     }
   },
