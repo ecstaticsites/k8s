@@ -24,7 +24,7 @@ spec:
         image: pickledish/caddy:{{ $.Chart.AppVersion }}
         command: ["caddy"]
         args: ["run", "--config", "/etc/caddy/caddy.json"]
-        # below, we claim ports 80 and 443 on the entire node
+        # below, we claim ports 80 443 and 517 on the entire node
         # so, implicitly, only one caddy pod per node using this
         # also means we need no service.yaml, as this does that job
         ports:
@@ -36,9 +36,10 @@ spec:
           containerPort: 443
           protocol: TCP
           hostPort: 443
-        - name: {{ $.Release.Name }}-admin
-          containerPort: 2019
-          protocol: TCP
+        - name: {{ $.Release.Name }}-udp
+          containerPort: 517
+          protocol: UDP
+          hostPort: 517
         resources: {}
         volumeMounts:
         - name: {{ $.Release.Name }}-data
@@ -49,6 +50,8 @@ spec:
       - name: {{ $.Release.Name }}-config-volume
         configMap:
           name: {{ $.Release.Name }}-config
+  # this is why it needs to be a statefulset, the persistent path for certs
+  # once it is set up with redis/s3/whatever it can be a deployment again
   volumeClaimTemplates:
   - metadata:
       name: {{ $.Release.Name }}-data

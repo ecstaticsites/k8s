@@ -56,6 +56,31 @@
         }
       }
     },
+    "layer4": {
+      "servers": {
+        "srv1": {
+          "listen": [
+            ":517"
+          ],
+          "routes": [
+            {
+              "handle": [
+                {
+                  "handler": "proxy",
+                  "upstreams": [
+                    {
+                      "dial": [
+                        "intake.default:8517"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
     "tls": {
       "automation": {
         "policies": [
