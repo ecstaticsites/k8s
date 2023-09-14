@@ -12,6 +12,8 @@ spec:
       app: {{ $.Chart.Name }}
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include "caddy.config" . | sha256sum }}
       labels:
         app: {{ $.Chart.Name }}
     spec:
@@ -19,7 +21,9 @@ spec:
       serviceAccountName: {{ $.Release.Name }}
       containers:
       - name: caddy
-        image: caddy:{{ $.Chart.AppVersion }}
+        image: pickledish/caddy:{{ $.Chart.AppVersion }}
+        command: ["caddy"]
+        args: ["run", "--config", "/etc/caddy/caddy.json"]
         # below, we claim ports 80 and 443 on the entire node
         # so, implicitly, only one caddy pod per node using this
         # also means we need no service.yaml, as this does that job

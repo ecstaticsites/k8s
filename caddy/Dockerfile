@@ -4,8 +4,8 @@
 # Shouldn't need to do this very often at all, but for when you do need to
 # Use the following commands
 #
-#
-#
+# docker buildx build . -t "pickledish/caddy:$(git rev-parse --short HEAD)"
+# docker push "pickledish/caddy:$(git rev-parse --short HEAD)"
 
 FROM caddy:2.7-builder AS builder
 

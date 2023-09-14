@@ -5,22 +5,8 @@ metadata:
   labels:
     app: {{ $.Chart.Name }}
 data:
-  # TODO -- typical problem, when updating this file alone, pods don't restart
-  Caddyfile: |
-    {
-      log {
-        format console
-      }
-      email brandon@willett.io
-      # this works as intended -- certs aren't renewed upon Caddy restart
-      # when this cache is mounted and has valid certs already, so less
-      # risk of hitting LE rate limit
-      storage file_system /var/lib/caddy/.local/share/caddy
-    }
-
-    api.cbnr.xyz {
-      log {
-        format console
-      }
-      reverse_proxy /query serve.default:8080
-    }
+  # this works as intended -- certs aren't renewed upon Caddy restart
+  # when this cache is mounted and has valid certs already, so less
+  # risk of hitting LE rate limit
+  caddy.json: |
+    {{- include "caddy.config" . | nindent 4 -}}
