@@ -36,9 +36,9 @@ spec:
           containerPort: 443
           protocol: TCP
           hostPort: 443
-        - name: {{ $.Release.Name }}-tcp
+        - name: {{ $.Release.Name }}-udp
           containerPort: 517
-          protocol: TCP
+          protocol: UDP
           hostPort: 517
         resources: {}
         volumeMounts:

@@ -10,6 +10,6 @@ spec:
   ports:
   - port: 8517
     targetPort: 8517
-    protocol: TCP
+    protocol: UDP
   selector:
     app: {{ $.Release.Name }}
