@@ -4,6 +4,7 @@ metadata:
   name: {{ $.Release.Name }}
   labels:
     app: {{ $.Chart.Name }}
+    release: {{ $.Release.Name }}
 spec:
   replicas: 1
   strategy:
@@ -14,10 +15,12 @@ spec:
   selector:
     matchLabels:
       app: {{ $.Chart.Name }}
+      release: {{ $.Release.Name }}
   template:
     metadata:
       labels:
         app: {{ $.Chart.Name }}
+        release: {{ $.Release.Name }}
     spec:
       serviceAccountName: {{ $.Release.Name }}
       containers:
@@ -30,6 +33,8 @@ spec:
         env:
         - name: SYSLOG_LISTENER_PORT
           value: "8517"
+        - name: SYSLOG_LISTENER_UDP
+          value: "yup"
         - name: INFLUX_URL
           value: "http://influxdb.default:8086"
         - name: INFLUX_DB_NAME
