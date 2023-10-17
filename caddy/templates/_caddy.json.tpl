@@ -27,7 +27,7 @@
                           "handler": "reverse_proxy",
                           "upstreams": [
                             {
-                              "dial": "serve.default:8080"
+                              "dial": "query.default:8080"
                             }
                           ]
                         }

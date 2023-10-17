@@ -24,10 +24,12 @@ spec:
       - name: {{ $.Release.Name }}
         image: "pickledish/cbnr:{{ $.Chart.AppVersion }}"
         imagePullPolicy: IfNotPresent
-        # this is what starts the container in "server" mode
+        # this is what starts the container in "query" mode
         args:
-        - serve
+        - query
         env:
+        - name: PERMISSIVE_MODE
+          value: "false"
         - name: HTTP_LISTENER_PORT
           value: "8080"
         - name: INFLUX_URL

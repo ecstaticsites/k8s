@@ -1,5 +1,5 @@
 apiVersion: v2
-name: serve
+name: query
 description: A Helm chart for Kubernetes
 
 type: application
@@ -9,4 +9,4 @@ type: application
 version: "0.1.0"
 
 # This is the app version, i.e. the image tag used for the docker image deployed
-appVersion: "2b197b2"
+appVersion: "9741a72"
