@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ $.Chart.Name }}
 spec:
-  replicas: 1
+  replicas: {{ $.Values.replicas }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -29,17 +29,18 @@ spec:
         - query
         env:
         - name: PERMISSIVE_MODE
-          value: "false"
+          value: "{{ $.Values.environment.permissive_mode }}"
         - name: HTTP_LISTENER_PORT
-          value: "8080"
+          value: "{{ $.Values.environment.http_listener_port }}"
         - name: INFLUX_URL
-          value: "http://influxdb.default:8086"
+          value: "{{ $.Values.environment.influx_url }}"
         - name: INFLUX_DB_NAME
-          value: "testdb"
+          value: "{{ $.Values.environment.influx_db_name }}"
         - name: CORS_ALLOWED_ORIGIN
-          value: "https://app.cbnr.xyz"
+          value: "{{ $.Values.environment.cors_allowed_origin }}"
+        - name: JWT_SECRET
+          value: "{{ $.Values.environment.jwt_secret }}"
         # equivalent to "docker run --expose", so no need for EXPOSE in dockerfile
         ports:
-        - containerPort: 8080
-          protocol: TCP
-        resources: {}
+        - containerPort: {{ $.Values.service.port }}
+          protocol: {{ $.Values.service.protocol }}

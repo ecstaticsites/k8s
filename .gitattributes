@@ -1,0 +1,2 @@
+kubeconfig.yaml filter=git-crypt diff=git-crypt
+query/values.yaml filter=git-crypt diff=git-crypt
