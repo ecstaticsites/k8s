@@ -23,6 +23,9 @@ spec:
         release: {{ $.Release.Name }}
     spec:
       serviceAccountName: {{ $.Release.Name }}
+      # below requires sibling chart "regcred" to be applied before this one
+      imagePullSecrets:
+      - name: regcred
       containers:
       - name: {{ $.Release.Name }}
         image: "pickledish/cbnr:{{ $.Chart.AppVersion }}"

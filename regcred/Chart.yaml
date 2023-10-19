@@ -1,12 +1,11 @@
 apiVersion: v2
-name: intake
+name: regcred
 description: A Helm chart for Kubernetes
 
+# This chart just exists to create a Secret that other charts can use to auth
+# to the docker registry and pull private images. Apply this before all others
 type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 version: "0.1.0"
-
-# This is the app version, i.e. the image tag used for the docker image deployed
-appVersion: "3f9b557"
