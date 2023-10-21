@@ -1,0 +1,28 @@
+server:
+  # Use some storage of the node you're running on, smaller than default
+  persistentVolume:
+    enabled: true
+    size: 1Gi
+    storageClass: "local-path"
+  # How can a deployment even have a PV? Statefulset necessary
+  statefulSet:
+    enabled: true
+
+# Don't know what this is, gonna assume we don't need it for now
+configmapReload:
+  prometheus:
+    enabled: false
+
+# The below are all dependent charts installed alongside prom
+# we want the k8s and node-level ones, no need for others quite yet
+alertmanager:
+  enabled: false
+
+kube-state-metrics:
+  enabled: true
+
+prometheus-node-exporter:
+  enabled: true
+
+prometheus-pushgateway:
+  enabled: false
