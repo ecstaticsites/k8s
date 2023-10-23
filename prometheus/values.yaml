@@ -13,16 +13,19 @@ configmapReload:
   prometheus:
     enabled: false
 
-# The below are all dependent charts installed alongside prom
+# The below are dependent charts installed alongside prom
 # we want the k8s and node-level ones, no need for others quite yet
 alertmanager:
   enabled: false
-kube-state-metrics:
-  enabled: true
-prometheus-node-exporter:
-  enabled: true
 prometheus-pushgateway:
   enabled: false
+
+prometheus-node-exporter:
+  enabled: true
+  extraArgs:
+  - "--collector.systemd"
+  - "--collector.sysctl"
+  - "--collector.processes"
 
 # So, the below is a lot
 # The short version is that it's identical to stock Prometheus chart values

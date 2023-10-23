@@ -6,6 +6,37 @@
   "apps": {
     "http": {
       "servers": {
+        "metric": {
+          "listen": [
+            ":2019"
+          ],
+          "routes": [
+            {
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "metrics"
+                        }
+                      ],
+                      "match": [
+                        {
+                          "path": [
+                            "/metrics"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "terminal": true
+            }
+          ]
+        },
         "srv0": {
           "listen": [
             ":443"
@@ -52,7 +83,8 @@
               ],
               "terminal": true
             }
-          ]
+          ],
+          "metrics": {}
         }
       }
     },

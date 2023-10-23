@@ -14,6 +14,9 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include "caddy.config" . | sha256sum }}
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "2019"
       labels:
         app: {{ $.Chart.Name }}
     spec:
@@ -40,6 +43,10 @@ spec:
           containerPort: 517
           protocol: UDP
           hostPort: 517
+          # the prom-scraping port, no host port for this one
+        - name: {{ $.Release.Name }}-metrics
+          containerPort: 2019
+          protocol: TCP
         resources: {}
         volumeMounts:
         - name: {{ $.Release.Name }}-data
