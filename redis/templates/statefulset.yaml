@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $.Release.Name }}
+  labels:
+    app: {{ $.Chart.Name }}
+    release: {{ $.Release.Name }}
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: {{ $.Chart.Name }}
+      release: {{ $.Release.Name }}
+  template:
+    metadata:
+      annotations:
+        # redis OSS doesn't expose prom-style metrics ?? bah
+        checksum/config: {{ include "redis.conf" . | sha256sum }}
+      labels:
+        app: {{ $.Chart.Name }}
+        release: {{ $.Release.Name }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: {{ $.Release.Name }}
+      containers:
+      - name: redis
+        image: redis:{{ $.Chart.AppVersion }}
+        command: ["redis-server", "/etc/redis/redis.conf"]
+        ports:
+          containerPort: {{ $.Values.service.port }}
+          protocol: {{ $.Values.service.protocol }}
+        volumeMounts:
+        - name: {{ $.Release.Name }}-data
+          mountPath: /var/lib/caddy/.local/share/caddy/
+        - name: {{ $.Release.Name }}-config
+          mountPath: /etc/redis/
+      volumes:
+      - name: {{ $.Release.Name }}-config
+        configMap:
+          name: {{ $.Release.Name }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ $.Release.Name }}-data
+    spec:
+      accessModes:
+      - "ReadWriteOnce"
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 1Gi

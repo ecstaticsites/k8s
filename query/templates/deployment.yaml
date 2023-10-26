@@ -4,6 +4,7 @@ metadata:
   name: {{ $.Release.Name }}
   labels:
     app: {{ $.Chart.Name }}
+    release: {{ $.Release.Name }}
 spec:
   replicas: {{ $.Values.replicas }}
   strategy:
@@ -14,6 +15,7 @@ spec:
   selector:
     matchLabels:
       app: {{ $.Chart.Name }}
+      release: {{ $.Release.Name }}
   template:
     metadata:
       labels:
