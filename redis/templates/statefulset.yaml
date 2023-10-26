@@ -26,15 +26,15 @@ spec:
       containers:
       - name: redis
         image: redis:{{ $.Chart.AppVersion }}
-        command: ["redis-server", "/etc/redis/redis.conf"]
+        command: ["redis-server", "/etc/redis/config/redis.conf"]
         ports:
-          containerPort: {{ $.Values.service.port }}
-          protocol: {{ $.Values.service.protocol }}
+        - containerPort: 6379
+          protocol: TCP
         volumeMounts:
         - name: {{ $.Release.Name }}-data
-          mountPath: /var/lib/caddy/.local/share/caddy/
+          mountPath: /etc/redis/data/
         - name: {{ $.Release.Name }}-config
-          mountPath: /etc/redis/
+          mountPath: /etc/redis/config/
       volumes:
       - name: {{ $.Release.Name }}-config
         configMap:

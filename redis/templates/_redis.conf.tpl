@@ -85,7 +85,7 @@
 # You will also need to set a password unless you explicitly disable protected
 # mode.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bind 127.0.0.1 -::1
+# bind 127.0.0.1 -::1
 
 # By default, outgoing connections (from replica to master, from Sentinel to
 # instances, cluster bus, etc.) are not bound to a specific local address. In
@@ -109,7 +109,8 @@ bind 127.0.0.1 -::1
 # By default protected mode is enabled. You should disable it only if
 # you are sure you want clients from other hosts to connect to Redis
 # even if no authentication is configured.
-protected-mode yes
+#
+# protected-mode yes
 
 # Redis uses default hardened security configuration directives to reduce the
 # attack surface on innocent users. Therefore, several sensitive configuration
@@ -427,9 +428,9 @@ locale-collate ""
 #
 # Snapshotting can be completely disabled with a single empty string argument
 # as in following example:
-#
-# save ""
-#
+
+save ""
+
 # Unless specified otherwise, by default Redis will save the DB:
 #   * After 3600 seconds (an hour) if at least 1 change was performed
 #   * After 300 seconds (5 minutes) if at least 100 changes were performed
@@ -508,7 +509,7 @@ rdb-del-sync-files no
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir ./
+dir /etc/redis/data
 
 ################################# REPLICATION #################################
 
@@ -1385,7 +1386,7 @@ disable-thp yes
 #
 # Please check https://redis.io/topics/persistence for more information.
 
-appendonly no
+appendonly yes
 
 # The base name of the append only file.
 #
