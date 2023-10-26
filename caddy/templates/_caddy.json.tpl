@@ -1,4 +1,4 @@
-{{- define "caddy.config" -}}
+{{- define "caddy.json" -}}
 {
   "admin": {
     "disabled": true
@@ -146,8 +146,16 @@
     }
   },
   "storage": {
-    "module": "file_system",
-    "root": "/var/lib/caddy/.local/share/caddy"
+    "module": "redis",
+    "address": "redis.default:6379",
+    "username": "",
+    "password": "",
+    "db": 1,
+    "key_prefix": "caddytls",
+    "value_prefix": "caddy-storage-redis",
+    "timeout": 5,
+    "tls_enabled": false,
+    "tls_insecure": true
   }
 }
 {{- end -}}
