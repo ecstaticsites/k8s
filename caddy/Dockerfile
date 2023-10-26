@@ -9,7 +9,7 @@
 
 FROM caddy:2.7-builder AS builder
 
-RUN xcaddy build --with github.com/mholt/caddy-l4
+RUN xcaddy build --with github.com/mholt/caddy-l4 --with github.com/gamalan/caddy-tlsredis
 
 FROM caddy:2.7
 
