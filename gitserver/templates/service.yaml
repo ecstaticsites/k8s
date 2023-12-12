@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}
+  labels:
+    # we could add annotations here so that prom discovers scrape targets through this service
+    # but prefer pod annotations for scraping so we still scrape non-ready / deregistered pods
+    app: {{ $.Chart.Name }}
+    release: {{ $.Release.Name }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: {{ $.Values.service.port }}
+    targetPort: {{ $.Values.service.port }}
+    protocol: {{ $.Values.service.protocol }}
+  selector:
+    app: {{ $.Chart.Name }}
+    release: {{ $.Release.Name }}

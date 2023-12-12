@@ -43,7 +43,8 @@
           ],
           "logs": {
             "logger_names": {
-              "api.cbnr.xyz": "default"
+              "api.cbnr.xyz": "default",
+              "git.cbnr.xyz": "default"
             }
           },
           "routes": [
@@ -78,6 +79,35 @@
                 {
                   "host": [
                     "api.cbnr.xyz"
+                  ]
+                }
+              ],
+              "terminal": true
+            },
+            {
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [
+                            {
+                              "dial": "gitserver.default:8080"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "match": [
+                {
+                  "host": [
+                    "git.cbnr.xyz"
                   ]
                 }
               ],
