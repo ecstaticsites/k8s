@@ -7,6 +7,7 @@ metadata:
     release: {{ $.Release.Name }}
 spec:
   replicas: {{ $.Values.replicas }}
+  minReadySeconds: 10
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -34,24 +35,14 @@ spec:
       - name: {{ $.Release.Name }}
         image: "pickledish/cbnr:{{ $.Chart.AppVersion }}"
         imagePullPolicy: IfNotPresent
-        # this is what starts the container in "query" mode
+        # this is what starts the cbnr binary in the appropriate mode
         args:
-        - query
+        - {{ required "need mode-specific values file" $.Values.subcommand }}
         env:
-        - name: PERMISSIVE_MODE
-          value: "{{ $.Values.environment.permissive_mode }}"
-        - name: HTTP_LISTENER_PORT
-          value: "{{ $.Values.environment.http_listener_port }}"
-        - name: METRICS_LISTENER_PORT
-          value: "{{ $.Values.environment.metrics_listener_port }}"
-        - name: INFLUX_URL
-          value: "{{ $.Values.environment.influx_url }}"
-        - name: INFLUX_DB_NAME
-          value: "{{ $.Values.environment.influx_db_name }}"
-        - name: CORS_ALLOWED_ORIGIN
-          value: "{{ $.Values.environment.cors_allowed_origin }}"
-        - name: JWT_SECRET
-          value: "{{ $.Values.environment.jwt_secret }}"
+        {{- range $name, $value := $.Values.environment }}
+        - name: "{{ $name }}"
+          value: "{{ $value }}"
+        {{- end }}
         # equivalent to "docker run --expose", so no need for EXPOSE in dockerfile
         ports:
         - containerPort: {{ $.Values.service.port }}

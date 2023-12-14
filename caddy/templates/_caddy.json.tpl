@@ -95,7 +95,7 @@
                           "handler": "reverse_proxy",
                           "upstreams": [
                             {
-                              "dial": "gitserver.default:8080"
+                              "dial": "git.default:8080"
                             }
                           ]
                         }
