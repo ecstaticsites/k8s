@@ -46,6 +46,10 @@ spec:
           value: "{{ $.Values.environment.metrics_listener_port }}"
         - name: JWT_SECRET
           value: "{{ $.Values.environment.jwt_secret }}"
+        - name: SUPABASE_URL
+          value: "{{ $.Values.environment.supabase_url }}"
+        - name: SUPABASE_ANON_KEY
+          value: "{{ $.Values.environment.supabase_anon_key }}"
         # equivalent to "docker run --expose", so no need for EXPOSE in dockerfile
         ports:
         - containerPort: {{ $.Values.service.port }}
