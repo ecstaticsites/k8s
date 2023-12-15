@@ -44,10 +44,12 @@
           "logs": {
             "logger_names": {
               "api.cbnr.xyz": "default",
-              "git.cbnr.xyz": "default"
+              "git.cbnr.xyz": "default",
+              "query.cbnr.xyz": "default"
             }
           },
           "routes": [
+          {{- range $i, $svc := list "api" "git" "query" }}
             {
               "handle": [
                 {
@@ -59,43 +61,7 @@
                           "handler": "reverse_proxy",
                           "upstreams": [
                             {
-                              "dial": "query.default:8080"
-                            }
-                          ]
-                        }
-                      ],
-                      "match": [
-                        {
-                          "path": [
-                            "/query"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ],
-              "match": [
-                {
-                  "host": [
-                    "api.cbnr.xyz"
-                  ]
-                }
-              ],
-              "terminal": true
-            },
-            {
-              "handle": [
-                {
-                  "handler": "subroute",
-                  "routes": [
-                    {
-                      "handle": [
-                        {
-                          "handler": "reverse_proxy",
-                          "upstreams": [
-                            {
-                              "dial": "git.default:8080"
+                              "dial": "{{ $svc }}.default:8080"
                             }
                           ]
                         }
@@ -107,12 +73,13 @@
               "match": [
                 {
                   "host": [
-                    "git.cbnr.xyz"
+                    "{{ $svc }}.cbnr.xyz"
                   ]
                 }
               ],
               "terminal": true
-            }
+            }{{ eq $i 2 | ternary "" "," }}
+          {{- end }}
           ],
           "metrics": {}
         }

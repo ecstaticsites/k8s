@@ -1,5 +1,2 @@
 kubeconfig.yaml filter=git-crypt diff=git-crypt
-gitserver/values.yaml filter=git-crypt diff=git-crypt
-query/values.yaml filter=git-crypt diff=git-crypt
-regcred/values.yaml filter=git-crypt diff=git-crypt
 cbnr/values/* filter=git-crypt diff=git-crypt
