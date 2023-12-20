@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $.Release.Name }}
+  labels:
+    app: {{ $.Chart.Name }}
+    release: {{ $.Release.Name }}
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: {{ $.Chart.Name }}
+      release: {{ $.Release.Name }}
+  template:
+    metadata:
+      annotations:
+        # does influx OSS doesn't expose prom-style metrics ??
+        checksum/config: {{ include "influxdb.conf" . | sha256sum }}
+      labels:
+        app: {{ $.Chart.Name }}
+        release: {{ $.Release.Name }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: {{ $.Release.Name }}
+      containers:
+      - name: influxdb
+        image: influxdb:{{ $.Chart.AppVersion }}
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - name: api
+          containerPort: 8086
+        - name: rpc
+          containerPort: 8088
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: api
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: api
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        # should get us a dedicated core if I set up static policy right
+        # confirmation not easy via k8s, confirmed by influxdb startup log
+        # lvl=info msg="Go runtime" log_id=0mE5ndGW000 version=go1.13.8 maxprocs=1
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "1"
+          limits:
+            memory: "4Gi"
+            cpu: "1"
+        volumeMounts:
+        - name: {{ $.Release.Name }}-data
+          mountPath: /var/lib/influxdb
+        - name: {{ $.Release.Name }}-config
+          mountPath: /etc/influxdb
+      volumes:
+      - name: {{ $.Release.Name }}-config
+        configMap:
+          name: {{ $.Release.Name }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ $.Release.Name }}-data
+    spec:
+      accessModes:
+      - "ReadWriteOnce"
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 10Gi

@@ -1,8 +1,3 @@
-```sh
-helm repo add influxdata https://helm.influxdata.com/
-helm upgrade --install influxdb -f values.yaml influxdata/influxdb
-```
-
 Then for CLI:
 
 ```sh
