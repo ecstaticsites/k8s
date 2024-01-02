@@ -30,6 +30,8 @@ spec:
         ports:
         - containerPort: 6379
           protocol: TCP
+        # no explicit resources (e.g. 1 dedicated core) for now
+        # since the only thing using redis is caddy at the moment
         volumeMounts:
         - name: {{ $.Release.Name }}-data
           mountPath: /etc/redis/data/

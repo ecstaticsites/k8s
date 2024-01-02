@@ -49,3 +49,12 @@ spec:
           protocol: {{ $.Values.service.protocol }}
         - containerPort: {{ $.Values.metrics.port }}
           protocol: {{ $.Values.metrics.protocol }}
+        {{- if $.Values.resources }}
+        resources:
+          requests:
+            cpu: "{{ $.Values.resources.cpu }}"
+            memory: "{{ $.Values.resources.memory }}"
+          limits:
+            cpu: "{{ $.Values.resources.cpu }}"
+            memory: "{{ $.Values.resources.memory }}"
+        {{- end }}
