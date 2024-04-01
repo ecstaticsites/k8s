@@ -59,11 +59,16 @@
                       "handle": [
                         {
                           "handler": "reverse_proxy",
-                          "upstreams": [
-                            {
-                              "dial": "{{ $svc }}.default:8080"
+                          "dynamic_upstreams": {
+                            "source": "a",
+                            "name": "{{ $svc }}.default",
+                            "port": "8080",
+                            "refresh": "10s",
+                            "versions": {
+                              "ipv4": true,
+                              "ipv6": false
                             }
-                          ]
+                          }
                         }
                       ]
                     }
