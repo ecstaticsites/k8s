@@ -34,9 +34,13 @@ spec:
       containers:
       - name: {{ $.Release.Name }}
         image: "pickledish/cbnr:{{ $.Chart.AppVersion }}"
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
+        # necessary for docker in docker! Remove this if I ever clean that up
+        securityContext:
+          privileged: true
         # this is what starts the cbnr binary in the appropriate mode
         args:
+        - cbnr
         - {{ required "need mode-specific values file" $.Values.subcommand }}
         env:
         {{- range $name, $value := $.Values.environment }}

@@ -94,7 +94,7 @@
       "servers": {
         "srv1": {
           "listen": [
-            "udp/:517"
+            "tcp/:517"
           ],
           "routes": [
             {
@@ -104,7 +104,7 @@
                   "upstreams": [
                     {
                       "dial": [
-                        "udp/intake.default:8517"
+                        "tcp/intake.default:8517"
                       ]
                     }
                   ]
