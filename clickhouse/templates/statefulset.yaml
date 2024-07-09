@@ -49,6 +49,7 @@ spec:
         - name: {{ $.Release.Name }}-config
           mountPath: /etc/clickhouse-server/config.d/config.yml
           subPath: config.yml
+          # note, the below doesn't actually work for executing SQL at pod start
         - name: {{ $.Release.Name }}-sql
           mountPath: /docker-entrypoint-initdb.d/accesslog.sql
           subPath: accesslog.sql
