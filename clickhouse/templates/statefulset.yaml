@@ -16,6 +16,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include "config.yml" . | sha256sum }}
+        checksum/sql: {{ include "accesslog.sql" . | sha256sum }}
         prometheus.io/scrape: "true"
         prometheus.io/path: /metrics
         prometheus.io/port: "9363"
