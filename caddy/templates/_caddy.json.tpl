@@ -43,9 +43,9 @@
           ],
           "logs": {
             "logger_names": {
-              "api.cbnr.xyz": "default",
-              "git.cbnr.xyz": "default",
-              "query.cbnr.xyz": "default"
+              "api.ecstaticsites.org": "default",
+              "git.ecstaticsites.org": "default",
+              "query.ecstaticsites.org": "default"
             }
           },
           "routes": [
@@ -78,7 +78,7 @@
               "match": [
                 {
                   "host": [
-                    "{{ $svc }}.cbnr.xyz"
+                    "{{ $svc }}.ecstaticsites.org"
                   ]
                 }
               ],
@@ -130,7 +130,7 @@
               }
             ],
             "subjects": [
-              "api.cbnr.xyz"
+              "api.ecstaticsites.org"
             ]
           }
         ]
