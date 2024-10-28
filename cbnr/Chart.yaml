@@ -9,4 +9,4 @@ type: application
 version: "0.1.0"
 
 # This is the app version, i.e. the image tag used for the docker image deployed
-appVersion: "4f9815f"
+appVersion: "e7a0887"
